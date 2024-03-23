@@ -12,7 +12,7 @@ int main(void) {
 	// Set button pin as input
 	DDRD &= ~(1 << BUTTON_PIN);  // Clear PD2 bit in Data Direction Register D
 
-	// (Optional) Enable internal pull-up resistor for button (if needed)
+	// (Optional) Enable internal pull-up resistor for button 
 	 PORTD |= (1 << BUTTON_PIN);
 
 	// Set LED pin as output
