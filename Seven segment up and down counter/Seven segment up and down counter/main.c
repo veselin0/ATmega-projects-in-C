@@ -44,30 +44,35 @@ int main(void)
 	
 	
     DDRD = 0b00000000;
-	PORTD = 0b00000011;
+	//PORTD = 0b00000011;
 	
-	DDRC = 0b1111111;
+	//DDRC = 0b1111111;
 	
 	
 	    while (1) 
     {
 		
 		//PORTC = count2 [z];
-		if (PIND == 0b00000010)
-		{
-			PORTC = count2 [z];
-			z++;
-			_delay_ms(DLY);
-			if(z > 9 ) z = 0;
-		}
-		
+		//if (PIND == 0b00000010)
+		//{
+			//PORTC = count2 [z];
+			//z++;
+			//_delay_ms(DLY);
+			//if(z > 9 ) z = 0;
+		//}
+		//
 		//if (PINB == 0b00000010)
 		//{
 			//z--;
 			//if (z < 0) z = 9;
 		//}
 		
+		for (z = 0; z < 9; z++) {
+			_delay_ms(DLY);
+			PORTD = count2 [z];
     }
+	
+	}
 }
 
 /*
