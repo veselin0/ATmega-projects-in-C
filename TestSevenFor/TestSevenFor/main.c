@@ -32,8 +32,14 @@ int main(void)
     
     while (1) 
     {
+		DDRD = 0b11111111;
+		for (z = 0; z <= 9; z++)
+		{
+			_delay_ms(DLY);
+			PORTD = count2 [z];
+		}
 		
-		for (z = 0; z < 9; z++)
+		for (z = 9; z >= 0; z--)
 		{
 			_delay_ms(DLY);
 			PORTD = count2 [z];

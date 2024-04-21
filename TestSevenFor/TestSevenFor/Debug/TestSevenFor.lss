@@ -3,31 +3,31 @@ TestSevenFor.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000014  00800100  000000fa  0000018e  2**0
+  0 .data         00000014  00800100  00000150  000001e4  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000000fa  00000000  00000000  00000094  2**1
+  1 .text         00000150  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000002  00800114  00800114  000001a2  2**0
+  2 .bss          00000002  00800114  00800114  000001f8  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000001a2  2**0
+  3 .comment      00000030  00000000  00000000  000001f8  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000001d4  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000228  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000020  00000000  00000000  00000214  2**0
+  5 .debug_aranges 00000020  00000000  00000000  00000268  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000073a  00000000  00000000  00000234  2**0
+  6 .debug_info   00000773  00000000  00000000  00000288  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000694  00000000  00000000  0000096e  2**0
+  7 .debug_abbrev 000006a5  00000000  00000000  000009fb  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   0000025e  00000000  00000000  00001002  2**0
+  8 .debug_line   0000028e  00000000  00000000  000010a0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000024  00000000  00000000  00001260  2**2
+  9 .debug_frame  00000024  00000000  00000000  00001330  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000038c  00000000  00000000  00001284  2**0
+ 10 .debug_str    0000038c  00000000  00000000  00001354  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000048  00000000  00000000  00001610  2**0
+ 11 .debug_loc    00000090  00000000  00000000  000016e0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000010  00000000  00000000  00001658  2**0
+ 12 .debug_ranges 00000010  00000000  00000000  00001770  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -72,8 +72,8 @@ Disassembly of section .text:
   74:	11 e0       	ldi	r17, 0x01	; 1
   76:	a0 e0       	ldi	r26, 0x00	; 0
   78:	b1 e0       	ldi	r27, 0x01	; 1
-  7a:	ea ef       	ldi	r30, 0xFA	; 250
-  7c:	f0 e0       	ldi	r31, 0x00	; 0
+  7a:	e0 e5       	ldi	r30, 0x50	; 80
+  7c:	f1 e0       	ldi	r31, 0x01	; 1
   7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
   80:	05 90       	lpm	r0, Z+
   82:	0d 92       	st	X+, r0
@@ -95,66 +95,115 @@ Disassembly of section .text:
   96:	b2 07       	cpc	r27, r18
   98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
   9a:	0e 94 53 00 	call	0xa6	; 0xa6 <main>
-  9e:	0c 94 7b 00 	jmp	0xf6	; 0xf6 <_exit>
+  9e:	0c 94 a6 00 	jmp	0x14c	; 0x14c <_exit>
 
 000000a2 <__bad_interrupt>:
   a2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 000000a6 <main>:
+int main(void)
 {
     
     while (1) 
     {
-		
-		for (z = 0; z < 9; z++)
-  a6:	10 92 15 01 	sts	0x0115, r1	; 0x800115 <__data_end+0x1>
-  aa:	10 92 14 01 	sts	0x0114, r1	; 0x800114 <__data_end>
-  ae:	1c c0       	rjmp	.+56     	; 0xe8 <main+0x42>
+		DDRD = 0b11111111;
+  a6:	8f ef       	ldi	r24, 0xFF	; 255
+  a8:	8a b9       	out	0x0a, r24	; 10
+		for (z = 0; z <= 9; z++)
+  aa:	10 92 15 01 	sts	0x0115, r1	; 0x800115 <__data_end+0x1>
+  ae:	10 92 14 01 	sts	0x0114, r1	; 0x800114 <__data_end>
+  b2:	1c c0       	rjmp	.+56     	; 0xec <main+0x46>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-  b0:	2f ef       	ldi	r18, 0xFF	; 255
-  b2:	85 ea       	ldi	r24, 0xA5	; 165
-  b4:	9e e0       	ldi	r25, 0x0E	; 14
-  b6:	21 50       	subi	r18, 0x01	; 1
-  b8:	80 40       	sbci	r24, 0x00	; 0
-  ba:	90 40       	sbci	r25, 0x00	; 0
-  bc:	e1 f7       	brne	.-8      	; 0xb6 <main+0x10>
-  be:	00 c0       	rjmp	.+0      	; 0xc0 <main+0x1a>
-  c0:	00 00       	nop
+  b4:	2f ef       	ldi	r18, 0xFF	; 255
+  b6:	85 ea       	ldi	r24, 0xA5	; 165
+  b8:	9e e0       	ldi	r25, 0x0E	; 14
+  ba:	21 50       	subi	r18, 0x01	; 1
+  bc:	80 40       	sbci	r24, 0x00	; 0
+  be:	90 40       	sbci	r25, 0x00	; 0
+  c0:	e1 f7       	brne	.-8      	; 0xba <main+0x14>
+  c2:	00 c0       	rjmp	.+0      	; 0xc4 <main+0x1e>
+  c4:	00 00       	nop
 		{
 			_delay_ms(DLY);
 			PORTD = count2 [z];
-  c2:	e0 91 14 01 	lds	r30, 0x0114	; 0x800114 <__data_end>
-  c6:	f0 91 15 01 	lds	r31, 0x0115	; 0x800115 <__data_end+0x1>
-  ca:	ee 0f       	add	r30, r30
-  cc:	ff 1f       	adc	r31, r31
-  ce:	e0 50       	subi	r30, 0x00	; 0
-  d0:	ff 4f       	sbci	r31, 0xFF	; 255
-  d2:	80 81       	ld	r24, Z
-  d4:	8b b9       	out	0x0b, r24	; 11
+  c6:	e0 91 14 01 	lds	r30, 0x0114	; 0x800114 <__data_end>
+  ca:	f0 91 15 01 	lds	r31, 0x0115	; 0x800115 <__data_end+0x1>
+  ce:	ee 0f       	add	r30, r30
+  d0:	ff 1f       	adc	r31, r31
+  d2:	e0 50       	subi	r30, 0x00	; 0
+  d4:	ff 4f       	sbci	r31, 0xFF	; 255
+  d6:	80 81       	ld	r24, Z
+  d8:	8b b9       	out	0x0b, r24	; 11
 {
     
     while (1) 
     {
+		DDRD = 0b11111111;
+		for (z = 0; z <= 9; z++)
+  da:	80 91 14 01 	lds	r24, 0x0114	; 0x800114 <__data_end>
+  de:	90 91 15 01 	lds	r25, 0x0115	; 0x800115 <__data_end+0x1>
+  e2:	01 96       	adiw	r24, 0x01	; 1
+  e4:	90 93 15 01 	sts	0x0115, r25	; 0x800115 <__data_end+0x1>
+  e8:	80 93 14 01 	sts	0x0114, r24	; 0x800114 <__data_end>
+  ec:	80 91 14 01 	lds	r24, 0x0114	; 0x800114 <__data_end>
+  f0:	90 91 15 01 	lds	r25, 0x0115	; 0x800115 <__data_end+0x1>
+  f4:	0a 97       	sbiw	r24, 0x0a	; 10
+  f6:	f4 f2       	brlt	.-68     	; 0xb4 <main+0xe>
+		{
+			_delay_ms(DLY);
+			PORTD = count2 [z];
+		}
 		
-		for (z = 0; z < 9; z++)
-  d6:	80 91 14 01 	lds	r24, 0x0114	; 0x800114 <__data_end>
-  da:	90 91 15 01 	lds	r25, 0x0115	; 0x800115 <__data_end+0x1>
-  de:	01 96       	adiw	r24, 0x01	; 1
-  e0:	90 93 15 01 	sts	0x0115, r25	; 0x800115 <__data_end+0x1>
-  e4:	80 93 14 01 	sts	0x0114, r24	; 0x800114 <__data_end>
-  e8:	80 91 14 01 	lds	r24, 0x0114	; 0x800114 <__data_end>
-  ec:	90 91 15 01 	lds	r25, 0x0115	; 0x800115 <__data_end+0x1>
-  f0:	09 97       	sbiw	r24, 0x09	; 9
-  f2:	f4 f2       	brlt	.-68     	; 0xb0 <main+0xa>
-  f4:	d8 cf       	rjmp	.-80     	; 0xa6 <main>
+		for (z = 9; z >= 0; z--)
+  f8:	89 e0       	ldi	r24, 0x09	; 9
+  fa:	90 e0       	ldi	r25, 0x00	; 0
+  fc:	90 93 15 01 	sts	0x0115, r25	; 0x800115 <__data_end+0x1>
+ 100:	80 93 14 01 	sts	0x0114, r24	; 0x800114 <__data_end>
+ 104:	1c c0       	rjmp	.+56     	; 0x13e <main+0x98>
+ 106:	2f ef       	ldi	r18, 0xFF	; 255
+ 108:	85 ea       	ldi	r24, 0xA5	; 165
+ 10a:	9e e0       	ldi	r25, 0x0E	; 14
+ 10c:	21 50       	subi	r18, 0x01	; 1
+ 10e:	80 40       	sbci	r24, 0x00	; 0
+ 110:	90 40       	sbci	r25, 0x00	; 0
+ 112:	e1 f7       	brne	.-8      	; 0x10c <main+0x66>
+ 114:	00 c0       	rjmp	.+0      	; 0x116 <main+0x70>
+ 116:	00 00       	nop
+		{
+			_delay_ms(DLY);
+			PORTD = count2 [z];
+ 118:	e0 91 14 01 	lds	r30, 0x0114	; 0x800114 <__data_end>
+ 11c:	f0 91 15 01 	lds	r31, 0x0115	; 0x800115 <__data_end+0x1>
+ 120:	ee 0f       	add	r30, r30
+ 122:	ff 1f       	adc	r31, r31
+ 124:	e0 50       	subi	r30, 0x00	; 0
+ 126:	ff 4f       	sbci	r31, 0xFF	; 255
+ 128:	80 81       	ld	r24, Z
+ 12a:	8b b9       	out	0x0b, r24	; 11
+		{
+			_delay_ms(DLY);
+			PORTD = count2 [z];
+		}
+		
+		for (z = 9; z >= 0; z--)
+ 12c:	80 91 14 01 	lds	r24, 0x0114	; 0x800114 <__data_end>
+ 130:	90 91 15 01 	lds	r25, 0x0115	; 0x800115 <__data_end+0x1>
+ 134:	01 97       	sbiw	r24, 0x01	; 1
+ 136:	90 93 15 01 	sts	0x0115, r25	; 0x800115 <__data_end+0x1>
+ 13a:	80 93 14 01 	sts	0x0114, r24	; 0x800114 <__data_end>
+ 13e:	80 91 14 01 	lds	r24, 0x0114	; 0x800114 <__data_end>
+ 142:	90 91 15 01 	lds	r25, 0x0115	; 0x800115 <__data_end+0x1>
+ 146:	99 23       	and	r25, r25
+ 148:	f4 f6       	brge	.-68     	; 0x106 <main+0x60>
+ 14a:	ad cf       	rjmp	.-166    	; 0xa6 <main>
 
-000000f6 <_exit>:
-  f6:	f8 94       	cli
+0000014c <_exit>:
+ 14c:	f8 94       	cli
 
-000000f8 <__stop_program>:
-  f8:	ff cf       	rjmp	.-2      	; 0xf8 <__stop_program>
+0000014e <__stop_program>:
+ 14e:	ff cf       	rjmp	.-2      	; 0x14e <__stop_program>
